@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Kubah</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        .clear {
+            background-color: red;
+            color: white;
+        }
+        .calculate {
+            background-color: green;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>UKURAN KUBAH</th>
+            <th>HITUNGAN KUBAH</th>
+        </tr>
+        <tr>
+            <td>
+                <label for="diameter">Diameter Bawah (meter):</label><br>
+                <input type="number" id="diameter" value="1" min="0" step="0.50" oninput="updateCalculations()"><br>
+
+                <label for="tinggi">Tinggi Kubah (meter):</label><br>
+                <input type="number" id="tinggi" value="0.5" disabled><br>
+
+                <label for="luas">Luas Kubah (meter persegi):</label><br>
+                <input type="number" id="luas" disabled><br>
+            </td>
+            <td>
+                <label for="hte">HTE (Harga Tertinggi Enamel):</label><br>
+                <span id="hte">Rp. 0</span><br>
+
+                <label for="hre">HRE (Harga Terendah Enamel):</label><br>
+                <span id="hre">Rp. 0</span><br>
+
+                <label for="htg">HTG (Harga Tertinggi Galvalum):</label><br>
+                <span id="htg">Rp. 0</span><br>
+
+                <label for="hrg">HRG (Harga Terendah Galvalum):</label><br>
+                <span id="hrg">Rp. 0</span><br>
+            </td>
+        </tr>
+    </table>
+    <button class="clear" onclick="clearFields()">CLEAR</button>
+
+    <script>
+        function updateCalculations() {
+            // Ambil nilai diameter dari pengguna
+            const diameter = parseFloat(document.getElementById('diameter').value) || 0;
+
+            // Tinggi kubah adalah setengah diameter
+            const tinggi = diameter / 2;
+
+            // Hitung luas kubah (asumsi setengah bola)
+            const luas = Math.PI * Math.pow(diameter, 2) / 2;
+
+            // Harga per meter persegi 
+            const hargaTertinggiEnamel = 1900 * 1000 ; // Rp/m² //1900 * 1000 untuk menambah desimal ,000
+            const hargaTerendahEnamel = 1500 * 1000; // Rp/m²
+            const hargaTertinggiGalvalum = 1000 * 1000; // Rp/m²
+            const hargaTerendahGalvalum = 800 * 1000;  // Rp/m²
+
+            // Hitung harga berdasarkan luas
+            const hte = luas * hargaTertinggiEnamel;
+            const hre = luas * hargaTerendahEnamel;
+            const htg = luas * hargaTertinggiGalvalum;
+            const hrg = luas * hargaTerendahGalvalum;
+
+            // Update hasil di form
+            document.getElementById('tinggi').value = tinggi.toFixed(2);
+            document.getElementById('luas').value = luas.toFixed(2);
+            document.getElementById('hte').textContent = `Rp. ${hte.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`; //ganti min atau max untuk
+            document.getElementById('hre').textContent = `Rp. ${hre.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`; //menambah angka desimal
+            document.getElementById('htg').textContent = `Rp. ${htg.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`; //contoh Rp. 100.000 bila value = 0
+            document.getElementById('hrg').textContent = `Rp. ${hrg.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`; //Rp. 100.000,00 bila value 2
+        }
+
+        function clearFields() {
+            document.getElementById('diameter').value = '';
+            document.getElementById('tinggi').value = '';
+            document.getElementById('luas').value = '';
+            document.getElementById('hte').textContent = 'Rp. 0';
+            document.getElementById('hre').textContent = 'Rp. 0';
+            document.getElementById('htg').textContent = 'Rp. 0';
+            document.getElementById('hrg').textContent = 'Rp. 0';
+        }
+
+        // Panggil fungsi perhitungan pertama kali
+        updateCalculations();
+    </script>
+</body>
+</html>
